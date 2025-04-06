@@ -1,4 +1,4 @@
-package com.practicum.speakeasy.retrofitlessonone.retrofit
+package com.practicum.speakeasy.retrofitlessonone.retrofit.post
 
 // Get a single post https://dummyjson.com/docs/posts
 

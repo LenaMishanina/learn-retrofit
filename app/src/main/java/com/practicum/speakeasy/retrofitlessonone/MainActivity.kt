@@ -3,7 +3,9 @@ package com.practicum.speakeasy.retrofitlessonone
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.speakeasy.retrofitlessonone.databinding.ActivityMainBinding
-import com.practicum.speakeasy.retrofitlessonone.retrofit.PostApi
+import com.practicum.speakeasy.retrofitlessonone.retrofit.MainApi
+import com.practicum.speakeasy.retrofitlessonone.retrofit.auth.AuthRequest
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,14 +34,21 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        val postApi = retrofit.create(PostApi::class.java)
+        val mainApi = retrofit.create(MainApi::class.java)
 
         binding.apply {
-            btnGetTitlePost.setOnClickListener {
+            btnLogin.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val post4 = postApi.getPostById(4)
+                    val user = mainApi.auth(
+                        AuthRequest(
+                            edUsername.text.toString(),
+                            edPassword.text.toString()
+                        )
+                    )
                     runOnUiThread {
-                        tvTitlePost.text = post4.title
+                        tvFirstName.text = user.firstName
+                        tvLastName.text = user.lastName
+                        Picasso.get().load(user.image).into(ivUser)
                     }
                 }
             }
