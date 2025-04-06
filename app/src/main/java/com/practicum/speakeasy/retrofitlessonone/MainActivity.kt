@@ -1,6 +1,7 @@
 package com.practicum.speakeasy.retrofitlessonone
 
 import android.os.Bundle
+import android.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.speakeasy.retrofitlessonone.databinding.ActivityMainBinding
@@ -46,6 +47,24 @@ class MainActivity : AppCompatActivity() {
                     adapter.submitList(posts.posts)
                 }
             }
+
+            searchView.setOnQueryTextListener(object: OnQueryTextListener {
+                override fun onQueryTextSubmit(text: String?): Boolean {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val searchPosts = text?.let { postApi.getSearchPosts(it) }
+                        runOnUiThread {
+                            adapter.submitList(searchPosts?.posts)
+                        }
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    return true
+                }
+
+            })
+
         }
     }
 }
