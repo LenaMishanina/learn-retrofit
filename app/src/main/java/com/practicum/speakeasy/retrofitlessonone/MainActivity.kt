@@ -1,10 +1,7 @@
 package com.practicum.speakeasy.retrofitlessonone
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.practicum.speakeasy.retrofitlessonone.databinding.ActivityMainBinding
 import com.practicum.speakeasy.retrofitlessonone.retrofit.PostApi
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
