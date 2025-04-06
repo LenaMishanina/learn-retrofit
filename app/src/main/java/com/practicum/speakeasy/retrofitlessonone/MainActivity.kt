@@ -2,6 +2,7 @@ package com.practicum.speakeasy.retrofitlessonone
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.speakeasy.retrofitlessonone.databinding.ActivityMainBinding
 import com.practicum.speakeasy.retrofitlessonone.retrofit.PostApi
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +14,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    private val adapter = PostAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +37,13 @@ class MainActivity : AppCompatActivity() {
         val postApi = retrofit.create(PostApi::class.java)
 
         binding.apply {
-            btnGetTitlePost.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val post4 = postApi.getPostById(4)
-                    runOnUiThread {
-                        tvTitlePost.text = post4.title
-                    }
+            rcPosts.layoutManager = LinearLayoutManager(this@MainActivity)
+            rcPosts.adapter = adapter
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val posts = postApi.getPosts()
+                runOnUiThread {
+                    adapter.submitList(posts.posts)
                 }
             }
         }
