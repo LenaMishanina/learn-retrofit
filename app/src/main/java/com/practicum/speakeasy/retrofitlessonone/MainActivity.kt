@@ -3,7 +3,7 @@ package com.practicum.speakeasy.retrofitlessonone
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.speakeasy.retrofitlessonone.databinding.ActivityMainBinding
-import com.practicum.speakeasy.retrofitlessonone.retrofit.MainApi
+import com.practicum.speakeasy.retrofitlessonone.retrofit.AuthApi
 import com.practicum.speakeasy.retrofitlessonone.retrofit.auth.AuthRequest
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +34,12 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        val mainApi = retrofit.create(MainApi::class.java)
+        val authApi = retrofit.create(AuthApi::class.java)
 
         binding.apply {
             btnLogin.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val user = mainApi.auth(
+                    val user = authApi.auth(
                         AuthRequest(
                             edUsername.text.toString(),
                             edPassword.text.toString()
