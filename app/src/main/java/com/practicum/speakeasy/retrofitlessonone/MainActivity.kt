@@ -5,7 +5,7 @@ import android.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.speakeasy.retrofitlessonone.databinding.ActivityMainBinding
-import com.practicum.speakeasy.retrofitlessonone.retrofit.PostApi
+import com.practicum.speakeasy.retrofitlessonone.retrofit.MainApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val accessToken = intent.getStringExtra("token")
+
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -35,23 +37,23 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-        val postApi = retrofit.create(PostApi::class.java)
+        val mainApi = retrofit.create(MainApi::class.java)
 
         binding.apply {
             rcPosts.layoutManager = LinearLayoutManager(this@MainActivity)
             rcPosts.adapter = adapter
 
             CoroutineScope(Dispatchers.IO).launch {
-                val posts = postApi.getPosts()
+                val posts = accessToken?.let { mainApi.getPostsAuth(it) }
                 runOnUiThread {
-                    adapter.submitList(posts.posts)
+                    adapter.submitList(posts?.posts)
                 }
             }
 
             searchView.setOnQueryTextListener(object: OnQueryTextListener {
                 override fun onQueryTextSubmit(text: String?): Boolean {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val searchPosts = text?.let { postApi.getSearchPosts(it) }
+                        val searchPosts = text?.let { mainApi.getSearchPostsAuth(accessToken ?: "", it) }
                         runOnUiThread {
                             adapter.submitList(searchPosts?.posts)
                         }

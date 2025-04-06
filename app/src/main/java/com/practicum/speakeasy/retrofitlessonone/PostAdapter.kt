@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.speakeasy.retrofitlessonone.databinding.PostItemBinding
-import com.practicum.speakeasy.retrofitlessonone.retrofit.Post
+import com.practicum.speakeasy.retrofitlessonone.retrofit.post.Post
 
 class PostAdapter: ListAdapter<Post, PostAdapter.Holder>(Comparator()) {
 
